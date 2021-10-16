@@ -80,11 +80,6 @@ test = torchtext.data.TabularDataset(
     fields=[('src', src), ('tgt', tgt)],
     filter_pred=len_filter
 )
-user_input = torchtext.data.TabularDataset(
-    path=input_path, format='tsv',
-    fields=[('src', src), ('tgt', tgt)],
-    filter_pred=len_filter
-)
 
 src.build_vocab(train, max_size=500)
 tgt.build_vocab(train, max_size=500)
@@ -247,7 +242,7 @@ def refine_outout(regex):
 
 
 predictor = Predictor(seq2seq_model, input_vocab, output_vocab)
-input_string = sys.argv[3]
+input_string = sys.argv[2]
 generated_string = ' '.join([x for x in predictor.predict(input_string.strip().split())[:-1] if x != '<pad>'])
 generated_string = refine_outout(generated_string)
 print("Input string: ", input_string)
