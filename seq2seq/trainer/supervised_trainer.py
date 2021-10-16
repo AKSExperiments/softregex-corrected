@@ -5,7 +5,7 @@ import random
 import time
 
 import torch
-import torchtext.legacy as torchtext
+import torchtext
 from torch import optim
 
 import seq2seq

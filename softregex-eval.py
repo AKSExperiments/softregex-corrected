@@ -12,7 +12,7 @@ import logging
 
 import torch
 from torch.optim.lr_scheduler import StepLR, ReduceLROnPlateau
-import torchtext.legacy as torchtext
+import torchtext
 
 import seq2seq
 
