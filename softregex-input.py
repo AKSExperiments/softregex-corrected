@@ -252,6 +252,8 @@ def refine_outout(regex):
 predictor = Predictor(seq2seq_model, input_vocab, output_vocab)
 input_string = sys.argv[3]
 generated_string = ' '.join([x for x in predictor.predict(input_string.strip().split())[:-1] if x != '<pad>'])
+print("Input string: ", input_string)
+print("Pred   : ", refine_outout(generated_string))
 num_samples = 0
 perfect_samples = 0
 dfa_perfect_samples = 0
