@@ -83,7 +83,7 @@ test = torchtext.data.TabularDataset(
 )
 user_input = torchtext.data.TabularDataset(
     path=input_path, format='tsv',
-    fields=[('src', src)],
+    fields=[('src', src), ('tgt', tgt)],
     filter_pred=len_filter
 )
 
@@ -205,8 +205,7 @@ batch_iterator = torchtext.data.BucketIterator(
     dataset=data, batch_size=batch_size,
     sort=False, sort_key=lambda x: len(x.src),
     device=device, train=False)
-tgt_vocab = data.fields[seq2seq.tgt_field_name].vocab
-pad = tgt_vocab.stoi[data.fields[seq2seq.tgt_field_name].pad_token]
+
 
 
 # In[20]:
@@ -251,7 +250,8 @@ def refine_outout(regex):
 
 
 predictor = Predictor(seq2seq_model, input_vocab, output_vocab)
-
+input_string = sys.argv[3]
+generated_string = ' '.join([x for x in predictor.predict(input_string.strip().split())[:-1] if x != '<pad>'])
 num_samples = 0
 perfect_samples = 0
 dfa_perfect_samples = 0
