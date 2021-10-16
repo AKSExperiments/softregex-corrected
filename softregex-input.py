@@ -180,7 +180,7 @@ seq2seq_model = sc_t.train(seq2seq_model, train,
                   resume=True)
 
 
-data = user_input
+data = test
 
 
 # In[19]:
