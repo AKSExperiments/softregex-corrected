@@ -65,7 +65,7 @@ data_tuple = datasets[dataset]
 # max_len = 60
 max_len = data_tuple[2]
 def len_filter(example):
-    return len(example.src) <= max_len and len(example.tgt) <= max_len
+    return len(example.src) <= max_len
 train = torchtext.data.TabularDataset(
     path='data/' + data_tuple[0] + '/train/data.txt', format='tsv',
     fields=[('src', src), ('tgt', tgt)],
@@ -83,7 +83,7 @@ test = torchtext.data.TabularDataset(
 )
 user_input = torchtext.data.TabularDataset(
     path=input_path, format='tsv',
-    fields=[('src', src), ('tgt', tgt)],
+    fields=[('src', src)],
     filter_pred=len_filter
 )
 
