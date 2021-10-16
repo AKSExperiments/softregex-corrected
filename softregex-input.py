@@ -51,7 +51,6 @@ if len(sys.argv) < 1:
     sys.exit(-1)
 
 dataset = sys.argv[1]
-input_path = sys.argv[2]
 
 datasets = {
     'kb13': ('KB13', 30, 60),
@@ -87,8 +86,6 @@ user_input = torchtext.data.TabularDataset(
     filter_pred=len_filter
 )
 
-print("test", test)
-print("User Input", user_input)
 src.build_vocab(train, max_size=500)
 tgt.build_vocab(train, max_size=500)
 input_vocab = src.vocab
@@ -252,44 +249,9 @@ def refine_outout(regex):
 predictor = Predictor(seq2seq_model, input_vocab, output_vocab)
 input_string = sys.argv[3]
 generated_string = ' '.join([x for x in predictor.predict(input_string.strip().split())[:-1] if x != '<pad>'])
+generated_string = refine_outout(generated_string)
 print("Input string: ", input_string)
-print("Pred   : ", refine_outout(generated_string))
-num_samples = 0
-perfect_samples = 0
-dfa_perfect_samples = 0
-
-match = 0
-total = 0
-
-
-model_correct = 0
-model_wrong = 0
-
-with torch.no_grad():
-    for batch in batch_iterator:
-        num_samples = num_samples + 1
-        
-        input_variables, input_lengths  = getattr(batch, seq2seq.src_field_name)
-
-        input_string = decode_tensor(input_variables, input_vocab)
-        
-        generated_string = ' '.join([x for x in predictor.predict(input_string.strip().split())[:-1] if x != '<pad>'])
-        
-        print("Input string: ", input_string)
-        print("Pred   : ", refine_outout(generated_string))
-
-        generated_string = refine_outout(generated_string)
-
-        print("Iterations ", num_samples, '\n')
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
+print("Pred   : ", generated_string)
 
 
 
