@@ -1,7 +1,7 @@
 from __future__ import print_function, division
 
 import torch
-import torchtext
+import torchtext.legacy as torchtext
 
 import seq2seq
 from seq2seq.loss import NLLLoss, PositiveLoss
@@ -37,6 +37,7 @@ class Evaluator(object):
         total = 0
 
         device = None if torch.cuda.is_available() else -1
+        print(device)
         batch_iterator = torchtext.data.BucketIterator(
             dataset=data, batch_size=self.batch_size,
             sort=True, sort_key=lambda x: len(x.src),
@@ -55,6 +56,9 @@ class Evaluator(object):
                 seqlist = other['sequence']
                 for step, step_output in enumerate(decoder_outputs):
                     target = target_variables[:, step + 1]
+                    if torch.cuda.is_available():
+                        target = target.cuda()
+
                     loss.eval_batch(step_output.view(target_variables.size(0), -1), target)
 
                     non_padding = target.ne(pad)

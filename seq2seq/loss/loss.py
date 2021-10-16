@@ -129,7 +129,11 @@ def score_by_probability_batch(golds,predicts, prob_model=None,vocab=None):
     max_len=40
     predicts=to_pad(predicts)
     golds=to_pad(golds)
-    score = prob_model(len(golds), predicts.type(torch.LongTensor).cuda(), golds.type(torch.LongTensor).cuda(), (predicts!=1).sum(1).tolist(), (golds!=1).sum(1).tolist())
+    if torch.cuda.is_available():
+        score = prob_model(len(golds), predicts.type(torch.LongTensor).cuda(), golds.type(torch.LongTensor).cuda(), (predicts!=1).sum(1).tolist(), (golds!=1).sum(1).tolist())
+    else:
+        score = prob_model(len(golds), predicts.type(torch.LongTensor), golds.type(torch.LongTensor),
+                           (predicts != 1).sum(1).tolist(), (golds != 1).sum(1).tolist())
     score_list = (torch.max(torch.exp(score),1)[0].float()*torch.max(torch.exp(score),1)[1].float()).tolist()
     return score_list
 #     except:
@@ -153,7 +157,11 @@ def score_by_probability(gold, predicted, prob_model = None, vocab = None):
         predicted_padded = predicted+['<pad>']*(max_len-len(predicted))
         predicted_idx_input = [[vocab[i] for i in predicted_padded]]
 
-        score = prob_model(1, torch.LongTensor(predicted_idx_input).cuda(), torch.LongTensor(gold_idx_input).cuda(), [predicted_len], [gold_len])
+        if torch.cuda.is_available():
+            score = prob_model(1, torch.LongTensor(predicted_idx_input).cuda(), torch.LongTensor(gold_idx_input).cuda(), [predicted_len], [gold_len])
+        else:
+            score = prob_model(1, torch.LongTensor(predicted_idx_input), torch.LongTensor(gold_idx_input),
+                               [predicted_len], [gold_len])
         score = math.exp(score[0][1])
     except KeyError:
         score = 0
@@ -418,7 +426,9 @@ class NLLLoss(Loss):
         return loss
 
     def eval_batch(self, outputs, target):
-        target=target.to('cuda')
+        if torch.cuda.is_available():
+            target = target.to('cuda')
+
         self.acc_loss += self.criterion(outputs, target)
         self.norm_term += 1
 

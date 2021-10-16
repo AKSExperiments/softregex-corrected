@@ -1,6 +1,6 @@
 import logging
 
-import torchtext
+import torchtext.legacy as torchtext
 
 class SourceField(torchtext.data.Field):
     """ Wrapper class of torchtext.data.Field that forces batch_first and include_lengths to be True. """

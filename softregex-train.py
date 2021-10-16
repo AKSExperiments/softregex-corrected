@@ -10,7 +10,7 @@ import logging
 
 import torch
 from torch.optim.lr_scheduler import StepLR, ReduceLROnPlateau
-import torchtext
+import torchtext.legacy as torchtext
 
 import seq2seq
 
@@ -214,7 +214,10 @@ for line in f.read().splitlines():
     line = line.split('\t')
     sc_loss_vocab[line[0]] = int(line[1])
 f.close()
-compare_regex_model = torch.load('./regex_equal_model/compare_regex_model.pth')
+if torch.cuda.is_available():
+    compare_regex_model = torch.load('./regex_equal_model/compare_regex_model.pth')
+else:
+    compare_regex_model = torch.load('./regex_equal_model/compare_regex_model.pth',  map_location=torch.device('cpu'))
 compare_regex_model.eval()
 
 
