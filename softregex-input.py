@@ -28,6 +28,9 @@ import torch.nn.functional as F
 import subprocess
 import sys
 
+import websockets
+import asyncio
+
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -242,11 +245,25 @@ def refine_outout(regex):
 
 
 predictor = Predictor(seq2seq_model, input_vocab, output_vocab)
-input_string = sys.argv[2]
-generated_string = ' '.join([x for x in predictor.predict(input_string.strip().split())[:-1] if x != '<pad>'])
-generated_string = refine_outout(generated_string)
-print("Input string: ", input_string)
-print("Pred   : ", generated_string)
+
+
+async def listen():
+    url = "ws://showmeregex.centralus.cloudapp.azure.com:8080"
+    async with websockets.connect(url) as ws:
+        ws.send("type:model")
+        while True:
+            input_string = await ws.recv()
+            input_str_arr = input_string.split(":", 1)
+            client = input_str_arr[0]
+            input_string = input_str_arr[1]
+            generated_string = ' '.join([x for x in predictor.predict(input_string.strip().split())[:-1] if x != '<pad>'])
+            generated_string = refine_outout(generated_string)
+            print("Input string: ", input_string)
+            print("Predicted: ", generated_string)
+            await ws.send(client + ":" + generated_string)
+
+
+asyncio.get_event_loop().run_until_complete(listen())
 
 
 
