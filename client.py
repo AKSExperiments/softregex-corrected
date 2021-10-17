@@ -10,8 +10,7 @@ async def listen():
     url = "ws://showmeregex.centralus.cloudapp.azure.com:8080"
     async with websockets.connect(url) as ws:
         await ws.send("type:" + clientType)
-        if clientType == "client":
-            await ws.send("lines containing message")
+
         while True:
             input_string = await ws.recv()
             print("Input string: ", input_string)

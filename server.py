@@ -27,12 +27,12 @@ async def echo(websocket, path):
                 for conn in connected:
                     if str(id(conn)) == client:
                         await conn.send(message_arr[1])
-    except websocket.exceptions.ConnectionClosed as e:
+    except websockets.exceptions.ConnectionClosed as e:
         print("A client disconnected")
         print(e)
     finally:
         connected.remove(websocket)
 
-start_server = websockets.serve(echo, "localhost", PORT)
+start_server = websockets.serve(echo, "0.0.0.0", PORT)
 asyncio.get_event_loop().run_until_complete(start_server)
 asyncio.get_event_loop().run_forever()
