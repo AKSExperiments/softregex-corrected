@@ -250,7 +250,7 @@ predictor = Predictor(seq2seq_model, input_vocab, output_vocab)
 async def listen():
     url = "ws://showmeregex.centralus.cloudapp.azure.com:8080"
     async with websockets.connect(url) as ws:
-        ws.send("type:model")
+        await ws.send("type:model")
         while True:
             input_string = await ws.recv()
             input_str_arr = input_string.split(":", 1)
