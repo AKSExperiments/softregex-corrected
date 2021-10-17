@@ -33,6 +33,6 @@ async def echo(websocket, path):
     finally:
         connected.remove(websocket)
 
-start_server = websockets.serve(echo, "showmeregex.centralus.cloudapp.azure.com", PORT)
+start_server = websockets.serve(echo, "localhost", PORT)
 asyncio.get_event_loop().run_until_complete(start_server)
 asyncio.get_event_loop().run_forever()
