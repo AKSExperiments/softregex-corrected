@@ -61,7 +61,8 @@ tgt = TargetField()
 datasets = {
     'kb13': ('KB13', 35, 60),
     'NL-RX-Synth': ('NL-RX-Synth', 10, 40),
-    'NL-RX-Turk': ('NL-RX-Turk', 10, 40)
+    'NL-RX-Turk': ('NL-RX-Turk', 10, 40),
+    'custom': ('NL-RX-Turk', 30, 100)
 }
 
 data_tuple = datasets[dataset]

@@ -58,7 +58,8 @@ dataset = sys.argv[1]
 datasets = {
     'kb13': ('KB13', 30, 60),
     'NL-RX-Synth': ('NL-RX-Synth', 10, 40),
-    'NL-RX-Turk': ('NL-RX-Turk', 10, 40)
+    'NL-RX-Turk': ('NL-RX-Turk', 10, 40),
+    'custom': ('NL-RX-SYNTH', 30, 100)
 }
 
 

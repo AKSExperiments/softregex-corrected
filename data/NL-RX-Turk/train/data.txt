@@ -6497,4 +6497,4 @@ lines which have not having a character and not starting with a capital letter	~
 lines with the string <M0> before the string <M1> , capital letter , or character	( <M0> ) . * ( ( <M1> ) | ( [ <CAP> ] ) | ( . ) ) . *
 lines ending with a number 1 or more times	. * ( ( . * ) ( [ <NUM> ] ) ) + . *
 lines with a number , 7 or more times or string <M0> before string <M1>	( ( [ <NUM> ] ) { 7 , } ) | ( ( <M0> ) . * ( <M1> ) . * )
-lines with words	\ b ( ( [ <VOW> ] ) | ( [ <LET> ] ) ) ( . * ) \ b
+lines with words with starting with a vowel or a letter	\ b ( ( [ <VOW> ] ) | ( [ <LET> ] ) ) ( . * ) \ b
